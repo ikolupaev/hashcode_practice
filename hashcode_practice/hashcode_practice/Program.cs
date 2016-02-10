@@ -17,6 +17,8 @@ namespace hashcode_practice
             {
                 ParseFile(f, f.Replace(".in", ".out"));
             }
+
+            Console.ReadLine();
         }
 
         private static void ParseFile(string inFile, string outFile)

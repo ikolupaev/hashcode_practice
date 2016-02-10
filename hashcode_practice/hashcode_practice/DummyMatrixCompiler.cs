@@ -8,17 +8,14 @@ namespace hashcode_practice
     {
         ICollection<string> commands = new List<string>();
 
+        private Matrix m_Matrix;
+
         public void Compile(Matrix matrix)
         {
-            for (var x = 0; x < matrix.Rows; x++)
+            m_Matrix = matrix;
+            for (var squareSize = Math.Min(matrix.Rows, matrix.Columns); squareSize >= 0; squareSize--)
             {
-                for (var y = 0; y < matrix.Columns; y++)
-                {
-                    if (matrix.Data[x, y])
-                    {
-                        commands.Add($"PAINT_SQUARE {x} {y} 0");
-                    }
-                }
+                FillWithSquares(squareSize);    
             }
         }
 
@@ -33,6 +30,32 @@ namespace hashcode_practice
                     writer.WriteLine(x);
                 }
             }
+        }
+
+        private void FillWithSquares(int squareSize)
+        {
+            Console.WriteLine($"Fill with square size: {squareSize}");
+
+            for (int x = squareSize; x + squareSize < m_Matrix.Rows; x++)
+                for(int y = squareSize; y + squareSize < m_Matrix.Columns; y++)
+                    if (IsSquareFit(x, y, squareSize)) PrintSquare(x, y, squareSize);
+        }
+
+        private bool IsSquareFit(int x, int y, int size)
+        {
+            for (int row = x - size; row <= x + size; row++)
+                for(int column = y - size; column <= y + size; column++)
+                    if (!m_Matrix.Data[row, column]) return false;
+
+            return true;
+        }
+
+        private void PrintSquare(int x, int y, int size)
+        {
+            commands.Add($"PAINT_SQUARE {x} {y} {size}");
+            for(int row = x - size; row < x + size; row++)
+                for (int column = y - size; column < y + size; column++)
+                    m_Matrix.Data[row, column] = false;
         }
     }
 }
