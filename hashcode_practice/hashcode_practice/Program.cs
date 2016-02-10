@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace hashcode_practice
 {
@@ -11,11 +8,11 @@ namespace hashcode_practice
     {
         static void Main(string[] args)
         {
-            var files = Directory.GetFiles(@"../../data/", "*.in");
+            var files = Directory.GetFiles(@"../../data/", "logo.in");
 
             foreach( var f in files )
             {
-                ParseFile(f, f.Replace(".in", ".out"));
+                new Thread(() => ParseFile(f, f.Replace(".in", ".out"))).Start();      
             }
 
             Console.ReadLine();
@@ -28,16 +25,16 @@ namespace hashcode_practice
             Console.WriteLine(inFile);
             var matrix = new Matrix();
 
-            Console.WriteLine("Loading...");
+            Console.WriteLine($"Loading {inFile}...");
             matrix.Load(inFile);
             Console.WriteLine(matrix);
 
 
-            Console.WriteLine("Compiling...");
+            Console.WriteLine($"Compiling {inFile}...");
             parser.Compile(matrix);
 
-            Console.WriteLine("Saving...");
             parser.Save(outFile);
+            Console.WriteLine($"Saved {outFile}: {parser.Commands.Count}...");
         }
     }
 }

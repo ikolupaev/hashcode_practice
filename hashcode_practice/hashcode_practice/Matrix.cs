@@ -5,10 +5,10 @@ namespace hashcode_practice
 {
     internal class Matrix
     {
-        public int Rows;
-        public int Columns;
+        public int Height;
+        public int Width;
 
-        public bool[,] Data;
+        public bool[][] Data;
 
         public Matrix()
         {
@@ -21,14 +21,14 @@ namespace hashcode_practice
                 SetDimentions(reader.ReadLine());
 
                 var line = reader.ReadLine();
-                var row = 0;
+                var y = 0;
                 while( line != null )
                 {
-                    for(var i = 0; i< line.Length; i++)
+                    for (var x = 0; x < line.Length; x++)
                     {
-                        Data[row, i] = line[i] == '#';
+                        Data[x][y] = line[x] == '#';
                     }
-                    row++;
+                    y++;
                     line = reader.ReadLine();
                 }
             }
@@ -37,15 +37,17 @@ namespace hashcode_practice
         private void SetDimentions(string line)
         {
             var s = line.Split(' ');
-            Rows = int.Parse(s[0]);
-            Columns = int.Parse(s[1]);
+            Height = int.Parse(s[0]);
+            Width = int.Parse(s[1]);
 
-            Data = new bool[Rows,Columns];
+            Data = new bool[Width][];
+            for(int x = 0; x < Width; x++ )
+                Data[x] = new bool[Height];
         }
 
         public override string ToString()
         {
-            return Rows + " x " + Columns;
+            return Height + " x " + Width;
         }
     }
 }
