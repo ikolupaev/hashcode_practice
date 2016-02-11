@@ -66,7 +66,7 @@ namespace Drones
             var a = ReadLineAsArrayOfInts();
             order.Location = new Coordinate(a[0], a[1]);
             var numberOfItems = ReadLineAsArrayOfInts().First();
-            LoadProducts(order.Products);
+            LoadOrderProducts(order.Products);
 
             Debug.Assert(numberOfItems == order.Products.Count);
         }
@@ -86,13 +86,19 @@ namespace Drones
             var a = ReadLineAsArrayOfInts();
             warehouse.Location = new Coordinate(a[0], a[1]);
 
-            LoadProducts(warehouse.Products);
+            LoadWarehouseProducts(warehouse.Products);
         }
 
-        void LoadProducts( List<Product> list )
+        void LoadOrderProducts( List<Product> list )
         {
             var productsQuantity = ReadLineAsArrayOfInts();
-            list.AddRange(productsQuantity.Select((q, index) => new Product { ProductType = index, Amount = q }));
+            list.AddRange(productsQuantity.Select((index) => new Product { ProductType = index, Amount = 1 }));
+        }
+
+        void LoadWarehouseProducts(List<Product> list)
+        {
+            var productsQuantity = ReadLineAsArrayOfInts();
+            list.AddRange(productsQuantity.Select((index, q) => new Product { ProductType = index, Amount = q }));
         }
 
         private int[] ReadLineAsArrayOfInts()
