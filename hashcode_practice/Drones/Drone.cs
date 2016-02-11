@@ -16,7 +16,7 @@ namespace hashcode_practice
 
     public class Drone
     {
-
+        public int Count { get; set; }
         public State CurrentState { get; set; }
         public int MaxPayload => DronesData.MaxPayLoad;
         public int CurrentPayload { get; set; }

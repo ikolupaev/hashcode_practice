@@ -24,7 +24,7 @@ namespace Drones
             Console.ReadLine();
         }
 
-        private static async void ParseFile(string inFile, string outFile)
+        private static void ParseFile(string inFile, string outFile)
         {
             var data = new DronesData();
             data.Load(inFile);
@@ -32,10 +32,10 @@ namespace Drones
             var commander = new Commander(data);
             commander.PlanWork();
 
-            await SaveWork(commander.drones, outFile);
+            SaveWork(commander.drones, outFile);
         }
 
-        private static async Task SaveWork(List<Drone> drones, string fileName)
+        private static void SaveWork(List<Drone> drones, string fileName)
         {
             using (var writer = File.CreateText(fileName))
             {
@@ -46,7 +46,7 @@ namespace Drones
                 {
                     foreach (var command in drone.Commands)
                     {
-                        await writer.WriteLineAsync($"{i} {command}");
+                        writer.WriteLine($"{i} {command.ToString()}");
                     }
 
                 }
