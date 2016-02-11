@@ -21,6 +21,7 @@ namespace hashcode_practice
 
     public class Warehouse
     {
+        public int Index { get; set; }
         public Coordinate Location { get; set; }
         public List<Product> Products { get; } = new List<Product>(); 
     }
