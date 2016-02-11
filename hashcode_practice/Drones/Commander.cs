@@ -10,6 +10,8 @@ namespace Drones
         private DronesData data;
         public List<Drone> drones;
 
+        int currentDroneIndex = 0;
+
         public Commander(DronesData data)
         {
             this.data = data;
@@ -28,26 +30,23 @@ namespace Drones
                 foreach (var product in order.Products)
                 {
                     var warehouse = data.Warehouses.FirstOrDefault(w => w.Products.Any(p => p.ProductType == product.ProductType && p.Amount > 0));
-                    //if (warehouse == null)
-                    //    continue;
+
                     var drone = GetBestDrone();
-                    if (drone == null)
-                        return;
+
                     var warehouseProduct = warehouse.Products[product.ProductType];
                     var amount = Math.Min(product.Amount, warehouseProduct.Amount);
 
                     drone.Commands.Add(new LoadCommand(warehouse.Index, product.ProductType, amount));
                     drone.Commands.Add(new DeliverCommand(order.Index, product.ProductType, amount));
-                    drone.Count++;
+
+                    warehouseProduct.Amount -= amount;
                 }
             }
         }
 
-
-
         private Drone GetBestDrone()
         {
-            return drones.FirstOrDefault(d => d.Count < 170);
+            return drones[currentDroneIndex++ % drones.Count()];
         }
     }
 }
