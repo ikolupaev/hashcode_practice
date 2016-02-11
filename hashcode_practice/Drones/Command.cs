@@ -43,7 +43,7 @@ namespace Drones
 
         public override string ToString()
         {
-            return $"L {this.orderIndex} {this.productType} {this.amount}";
+            return $"D {this.orderIndex} {this.productType} {this.amount}";
         }
     }
 
