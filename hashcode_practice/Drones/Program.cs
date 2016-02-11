@@ -10,6 +10,7 @@ namespace Drones
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             var files = Directory.GetFiles(@"../../data/", "*.in");
@@ -23,32 +24,18 @@ namespace Drones
             Console.ReadLine();
         }
 
-        private static void ParseFile(string inFile, string outFile)
+        private static async void ParseFile(string inFile, string outFile)
         {
             var data = new DronesData();
             data.Load(inFile);
 
-            var drones = InitializeDrones(data.DronesAmount);
+            var commander = new Commander(data);
+            commander.PlanWork();
 
-            SimulateWork(data, drones);
-
-            SaveWork(drones, outFile);
+            await SaveWork(commander.drones, outFile);
         }
 
-        private static void SimulateWork(DronesData data, List<Drone> drones)
-        {
-
-            for (int i = 0; i < data.MaxTurns; i++)
-            {
-                foreach (var drone in drones)
-                {
-                    
-                }    
-            }
-
-        }
-
-        private static async void SaveWork(List<Drone> drones, string fileName)
+        private static async Task SaveWork(List<Drone> drones, string fileName)
         {
             using (var writer = File.CreateText(fileName))
             {
@@ -61,21 +48,9 @@ namespace Drones
                     {
                         await writer.WriteLineAsync($"{i} {command}");
                     }
-                    
+
                 }
             }
         }
-
-        private static List<Drone> InitializeDrones(int amount)
-        {
-            var drones = new List<Drone>(amount);
-
-            for (int i = 0; i < amount; i++)
-            {
-                drones.Add(new Drone());
-            }
-
-            return drones;
-        } 
     }
 }
