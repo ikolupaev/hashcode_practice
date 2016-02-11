@@ -42,6 +42,7 @@ namespace Drones
             this.Warehouses = new Warehouse[NumberOfWarehouse];
             for( int i = 0; i < NumberOfWarehouse; i++ )
             {
+                Warehouses[i] = new Warehouse();
                 LoadWareHouse(Warehouses[i]);
             }
         }

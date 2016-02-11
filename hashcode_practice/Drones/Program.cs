@@ -17,12 +17,14 @@ namespace Drones
             {
                 ParseFile(f, f.Replace(".in", ".out"));
             }
+
+            Console.ReadLine();
         }
 
         private static void ParseFile(string inFile, string outFile)
         {
             var data = new DronesData();
-
+            data.Load(inFile);
         }
     }
 }
