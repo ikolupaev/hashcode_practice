@@ -14,14 +14,19 @@ namespace Drones
         }
 
         public int Columns { get; private set; }
+        public int Rows { get; private set; }
+
         public int Drones { get; private set; }
+
         public static int MaxPayLoad { get; private set; }
         public int ProductTypes { get; private set; }
-        public int Rows { get; private set; }
         public int MaxTurns { get; private set; }
+
         public static int[] ProductWeights { get; private set; }
+
         public int NumberOfWarehouse { get; private set; }
         public Warehouse[] Warehouses { get; private set; }
+
         public int NumberOfOrders { get; private set; }
         public Order[] Orders { get; private set; }
 
