@@ -18,6 +18,7 @@ namespace Drones
                 ParseFile(f, f.Replace(".in", ".out"));
             }
 
+            Console.WriteLine("Complete. Please press any key...");
             Console.ReadLine();
         }
 
