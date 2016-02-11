@@ -48,7 +48,7 @@ namespace Drones
                     {
                         writer.WriteLine($"{i} {command.ToString()}");
                     }
-
+                    i++;
                 }
             }
         }
