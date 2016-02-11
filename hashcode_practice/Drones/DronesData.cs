@@ -16,7 +16,7 @@ namespace Drones
         public int MaxPayLoad { get; private set; }
         public int ProductTypes { get; private set; }
         public int Rows { get; private set; }
-        public int Turns { get; private set; }
+        public int MaxTurns { get; private set; }
         public int[] ProductWeights { get; private set; }
         public int NumberOfWarehouse { get; private set; }
         public Warehouse[] Warehouses { get; private set; }
@@ -63,7 +63,7 @@ namespace Drones
             this.Rows = int.Parse(s[0]);
             this.Columns = int.Parse(s[1]);
             this.Drones = int.Parse(s[2]);
-            this.Turns = int.Parse(s[3]);
+            this.MaxTurns = int.Parse(s[3]);
             this.MaxPayLoad = int.Parse(s[4]);
         }
     }
