@@ -31,6 +31,8 @@ namespace Drones
             var drones = InitializeDrones(data.DronesAmount);
 
             SimulateWork(data, drones);
+
+            SaveWork(drones, outFile);
         }
 
         private static void SimulateWork(DronesData data, List<Drone> drones)
@@ -44,6 +46,24 @@ namespace Drones
                 }    
             }
 
+        }
+
+        private static async void SaveWork(List<Drone> drones, string fileName)
+        {
+            using (var writer = File.CreateText(fileName))
+            {
+                writer.WriteLine(drones.Sum(d => d.Commands.Count));
+
+                int i = 0;
+                foreach (var drone in drones)
+                {
+                    foreach (var command in drone.Commands)
+                    {
+                        await writer.WriteLineAsync($"{i} {command}");
+                    }
+                    
+                }
+            }
         }
 
         private static List<Drone> InitializeDrones(int amount)
