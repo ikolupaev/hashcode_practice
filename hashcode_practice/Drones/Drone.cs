@@ -14,6 +14,11 @@ namespace hashcode_practice
         Fly
     }
 
+    public class Command
+    {
+        
+    }
+
     public class Drone
     {
 
@@ -22,6 +27,8 @@ namespace hashcode_practice
         public int CurrentPayload { get; set; }
 
         public List<Product> Products { get; } = new List<Product>();
+
+        public List<Command> Commands { get; } = new List<Command>(); 
 
         public void AddProduct(Product product)
         {
