@@ -8,13 +8,13 @@ namespace hashcode_practice
 {
     public struct Coordinate
     {
-        public int X;
-        public int Y;
+        public int Row;
+        public int Column;
 
-        public Coordinate(int x, int y)
+        public Coordinate(int row, int column)
         {
-            X = x;
-            Y = y;
+            Row = row;
+            Column = column;
         }
     }
 

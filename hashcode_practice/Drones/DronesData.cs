@@ -21,9 +21,11 @@ namespace Drones
         public int NumberOfWarehouse { get; private set; }
         public Warehouse[] Warehouses { get; private set; }
 
+        TextReader reader;
+
         internal void Load(string inFile)
         {
-            using (var reader = File.OpenText(inFile))
+            using (reader = File.OpenText(inFile))
             {
                 SetParameters(reader.ReadLine());
 
@@ -31,11 +33,11 @@ namespace Drones
                 this.ProductWeights = StringToArrayOfInts(reader.ReadLine());
                 this.NumberOfWarehouse = int.Parse(reader.ReadLine());
 
-                LoadWareHouses(reader);
+                LoadWareHouses();
             }
         }
 
-        private void LoadWareHouses( TextReader reader )
+        private void LoadWareHouses()
         {
             this.Warehouses = new Warehouse[NumberOfWarehouse];
             for( int i = 0; i < NumberOfWarehouse; i++ )
