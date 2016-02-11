@@ -8,7 +8,7 @@ namespace hashcode_practice
     {
         static void Main(string[] args)
         {
-            var files = Directory.GetFiles(@"../../data/", "logo.in");
+            var files = Directory.GetFiles(@"../../data/", "*.in");
 
             foreach( var f in files )
             {
