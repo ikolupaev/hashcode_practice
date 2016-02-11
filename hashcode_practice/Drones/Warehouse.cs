@@ -38,6 +38,7 @@ namespace hashcode_practice
 
         public List<Product> Products { get; } = new List<Product>();
 
+        //total order weight
         public int Weight => Products.Sum(product => product.Weight);
     }
 }

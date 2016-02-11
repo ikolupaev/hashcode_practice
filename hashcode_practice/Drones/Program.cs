@@ -10,6 +10,7 @@ namespace Drones
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             var files = Directory.GetFiles(@"../../data/", "*.in");
@@ -28,34 +29,8 @@ namespace Drones
             var data = new DronesData();
             data.Load(inFile);
 
-            var drones = InitializeDrones(data.DronesAmount);
-
-            SimulateWork(data, drones);
+            var commander = new Commander(data);
+            commander.PlanWork();
         }
-
-        private static void SimulateWork(DronesData data, List<Drone> drones)
-        {
-
-            for (int i = 0; i < data.MaxTurns; i++)
-            {
-                foreach (var drone in drones)
-                {
-                    
-                }    
-            }
-
-        }
-
-        private static List<Drone> InitializeDrones(int amount)
-        {
-            var drones = new List<Drone>(amount);
-
-            for (int i = 0; i < amount; i++)
-            {
-                drones.Add(new Drone());
-            }
-
-            return drones;
-        } 
     }
 }

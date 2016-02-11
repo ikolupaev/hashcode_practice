@@ -16,7 +16,7 @@ namespace Drones
         public int Columns { get; private set; }
         public int Rows { get; private set; }
 
-        public int DronesAmount { get; private set; }
+        public int NumberOfDrones { get; private set; }
 
         public static int MaxPayLoad { get; private set; }
         public int ProductTypes { get; private set; }
@@ -105,7 +105,7 @@ namespace Drones
             var s = v.Split(' ');
             this.Rows = int.Parse(s[0]);
             this.Columns = int.Parse(s[1]);
-            this.DronesAmount = int.Parse(s[2]);
+            this.NumberOfDrones = int.Parse(s[2]);
             this.MaxTurns = int.Parse(s[3]);
             MaxPayLoad = int.Parse(s[4]);
         }
