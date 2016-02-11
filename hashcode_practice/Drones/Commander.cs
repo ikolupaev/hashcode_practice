@@ -18,10 +18,24 @@ namespace Drones
 
         internal void PlanWork()
         {
-            foreach( var order in data.Orders )
+            foreach (var order in data.Orders)
             {
+                foreach (var product in order.Products)
+                {
+                    var warehouse = data.Warehouses.FirstOrDefault(w => w.Products.Any(p => p.ProductType == product.ProductType));
+                    var drone = GetBestDrone();
+                    var warehouseProduct = warehouse.Products[product.ProductType];
+                    var amount = Math.Min(product.Amount, warehouseProduct.Amount);
 
+                    drone.Commands.Add(new LoadCommand(warehouse.Index, product.ProductType, amount));
+                    drone.Commands.Add(new DeliverCommand(order.Index, product.ProductType, amount));
+                }
             }
+        }
+
+        private Drone GetBestDrone()
+        {
+            return drones.First();
         }
     }
 }

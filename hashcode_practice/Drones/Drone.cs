@@ -25,24 +25,24 @@ namespace hashcode_practice
 
         public List<Command> Commands { get; } = new List<Command>(); 
 
-        public void AddProduct(Product product)
-        {
-            if(CurrentPayload + product.Weight > MaxPayload)
-                throw new InvalidOperationException("Out of limit by maxpayload");
+        //public void AddProduct(Product product)
+        //{
+        //    if(CurrentPayload + product.Weight > MaxPayload)
+        //        throw new InvalidOperationException("Out of limit by maxpayload");
 
-            Products.Add(product);
-            Commands.Add(new LoadCommand());
-            CurrentPayload += product.Weight;
-        }
+        //    Products.Add(product);
+        //    Commands.Add(new LoadCommand());
+        //    CurrentPayload += product.Weight;
+        //}
 
-        public void AddOrder(Order order)
-        {
-            if (CurrentPayload + order.Weight > MaxPayload)
-                throw new InvalidOperationException("Out of limit by maxpayload");
+        //public void AddOrder(Order order)
+        //{
+        //    if (CurrentPayload + order.Weight > MaxPayload)
+        //        throw new InvalidOperationException("Out of limit by maxpayload");
 
-            Products.AddRange(order.Products);
-            CurrentPayload += order.Weight;
-        }
+        //    Products.AddRange(order.Products);
+        //    CurrentPayload += order.Weight;
+        //}
 
         public void Deliver()
         {

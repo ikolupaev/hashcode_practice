@@ -98,7 +98,7 @@ namespace Drones
         void LoadWarehouseProducts(List<Product> list)
         {
             var productsQuantity = ReadLineAsArrayOfInts();
-            list.AddRange(productsQuantity.Select((index, q) => new Product { ProductType = index, Amount = q }));
+            list.AddRange(productsQuantity.Select((index,q) => new Product { ProductType = index, Amount = q }));
         }
 
         private int[] ReadLineAsArrayOfInts()
