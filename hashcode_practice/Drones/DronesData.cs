@@ -17,7 +17,7 @@ namespace Drones
         public int ProductTypes { get; private set; }
         public int Rows { get; private set; }
         public int MaxTurns { get; private set; }
-        public int[] ProductWeights { get; private set; }
+        public static int[] ProductWeights { get; private set; }
         public int NumberOfWarehouse { get; private set; }
         public Warehouse[] Warehouses { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Drones
                 SetParameters(reader.ReadLine());
 
                 this.ProductTypes = int.Parse(reader.ReadLine());
-                this.ProductWeights = StringToArrayOfInts(reader.ReadLine());
+                ProductWeights = StringToArrayOfInts(reader.ReadLine());
                 this.NumberOfWarehouse = int.Parse(reader.ReadLine());
 
                 LoadWareHouses();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Drones;
 
 namespace hashcode_practice
 {
@@ -21,13 +22,16 @@ namespace hashcode_practice
     public class Warehouse
     {
         public Coordinate Location { get; set; }
-        public List<Product> Products { get; } = new List<Product>(); 
+        public List<Product> Products { get; } = new List<Product>();
+
+        public int Weight => Products.Sum(product => product.Weight);
     }
 
     public class Product
     {
         public int ProductType { get; set; }
         public int Amount { get; set; }
+        public int Weight => DronesData.ProductWeights[ProductType];
     }
 
     public class Order
