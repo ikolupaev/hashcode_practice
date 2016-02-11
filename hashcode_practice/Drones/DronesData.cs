@@ -13,7 +13,7 @@ namespace Drones
 
         public int Columns { get; private set; }
         public int Drones { get; private set; }
-        public int MaxPayLoad { get; private set; }
+        public static int MaxPayLoad { get; private set; }
         public int ProductTypes { get; private set; }
         public int Rows { get; private set; }
         public int MaxTurns { get; private set; }

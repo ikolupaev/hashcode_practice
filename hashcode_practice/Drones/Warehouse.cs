@@ -23,8 +23,6 @@ namespace hashcode_practice
     {
         public Coordinate Location { get; set; }
         public List<Product> Products { get; } = new List<Product>();
-
-        public int Weight => Products.Sum(product => product.Weight);
     }
 
     public class Product
@@ -38,6 +36,8 @@ namespace hashcode_practice
     {
         public Coordinate Location { get; set; }
 
-        List<Product> Products { get; } = new List<Product>();
+        public List<Product> Products { get; } = new List<Product>();
+
+        public int Weight => Products.Sum(product => product.Weight);
     }
 }
