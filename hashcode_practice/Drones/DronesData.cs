@@ -15,11 +15,11 @@ namespace Drones
 
         public int Columns { get; private set; }
         public int Drones { get; private set; }
-        public int MaxPayLoad { get; private set; }
+        public static int MaxPayLoad { get; private set; }
         public int ProductTypes { get; private set; }
         public int Rows { get; private set; }
         public int MaxTurns { get; private set; }
-        public int[] ProductWeights { get; private set; }
+        public static int[] ProductWeights { get; private set; }
         public int NumberOfWarehouse { get; private set; }
         public Warehouse[] Warehouses { get; private set; }
         public int NumberOfOrders { get; private set; }
@@ -34,7 +34,7 @@ namespace Drones
                 SetParameters(reader.ReadLine());
 
                 this.ProductTypes = int.Parse(reader.ReadLine());
-                this.ProductWeights = ReadLineAsArrayOfInts();
+                ProductWeights = ReadLineAsArrayOfInts();
                 this.NumberOfWarehouse = int.Parse(reader.ReadLine());
 
                 LoadWareHouses();
@@ -102,7 +102,7 @@ namespace Drones
             this.Columns = int.Parse(s[1]);
             this.Drones = int.Parse(s[2]);
             this.MaxTurns = int.Parse(s[3]);
-            this.MaxPayLoad = int.Parse(s[4]);
+            MaxPayLoad = int.Parse(s[4]);
         }
     }
 }
