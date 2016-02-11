@@ -26,6 +26,16 @@ namespace Drones
         {
             var data = new DronesData();
             data.Load(inFile);
+
+            SimulateWork(data);
+        }
+
+        private static void SimulateWork(DronesData data)
+        {
+            for (int i = 0; i < data.MaxTurns; i++)
+            {
+                
+            }
         }
     }
 }
