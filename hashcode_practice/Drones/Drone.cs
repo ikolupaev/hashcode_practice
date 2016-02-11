@@ -14,9 +14,24 @@ namespace hashcode_practice
         Fly
     }
 
+    public enum CommandType
+    {
+        Load,
+        Unload,
+        Deliver,
+        Wait
+    }
+
     public class Command
     {
-        
+        public CommandType Type { get; set; }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+
+            return sb.ToString();
+        }
     }
 
     public class Drone
