@@ -56,7 +56,7 @@ namespace Drones
 
             for(int i = 0; i< NumberOfOrders; i++)
             {
-                this.Orders[i] = new Order();
+                this.Orders[i] = new Order { Index = i};
                 LoadOrder(this.Orders[i]);
             }
         }
