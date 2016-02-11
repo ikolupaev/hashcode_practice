@@ -24,13 +24,33 @@ namespace Drones
             Console.ReadLine();
         }
 
-        private static void ParseFile(string inFile, string outFile)
+        private static async void ParseFile(string inFile, string outFile)
         {
             var data = new DronesData();
             data.Load(inFile);
 
             var commander = new Commander(data);
             commander.PlanWork();
+
+            await SaveWork(commander.drones, outFile);
+        }
+
+        private static async Task SaveWork(List<Drone> drones, string fileName)
+        {
+            using (var writer = File.CreateText(fileName))
+            {
+                writer.WriteLine(drones.Sum(d => d.Commands.Count));
+
+                int i = 0;
+                foreach (var drone in drones)
+                {
+                    foreach (var command in drone.Commands)
+                    {
+                        await writer.WriteLineAsync($"{i} {command}");
+                    }
+
+                }
+            }
         }
     }
 }

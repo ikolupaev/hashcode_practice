@@ -8,7 +8,7 @@ namespace Drones
     internal class Commander
     {
         private DronesData data;
-        private List<Drone> drones;
+        public List<Drone> drones;
 
         public Commander(DronesData data)
         {
