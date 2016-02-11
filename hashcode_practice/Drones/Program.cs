@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using hashcode_practice;
 
 namespace Drones
 {
@@ -32,10 +33,27 @@ namespace Drones
 
         private static void SimulateWork(DronesData data)
         {
+            var drones = InitializeDrones(data.DronesAmount);
+
             for (int i = 0; i < data.MaxTurns; i++)
             {
-                
+                foreach (var drone in drones)
+                {
+                    
+                }    
             }
         }
+
+        private static List<Drone> InitializeDrones(int amount)
+        {
+            var drones = new List<Drone>(amount);
+
+            for (int i = 0; i < amount; i++)
+            {
+                drones.Add(new Drone());
+            }
+
+            return drones;
+        } 
     }
 }
