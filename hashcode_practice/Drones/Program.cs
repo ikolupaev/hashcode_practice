@@ -28,12 +28,13 @@ namespace Drones
             var data = new DronesData();
             data.Load(inFile);
 
-            SimulateWork(data);
+            var drones = InitializeDrones(data.DronesAmount);
+
+            SimulateWork(data, drones);
         }
 
-        private static void SimulateWork(DronesData data)
+        private static void SimulateWork(DronesData data, List<Drone> drones)
         {
-            var drones = InitializeDrones(data.DronesAmount);
 
             for (int i = 0; i < data.MaxTurns; i++)
             {
@@ -42,6 +43,7 @@ namespace Drones
                     
                 }    
             }
+
         }
 
         private static List<Drone> InitializeDrones(int amount)
