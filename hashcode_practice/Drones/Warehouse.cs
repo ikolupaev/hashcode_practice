@@ -22,7 +22,7 @@ namespace hashcode_practice
     public class Warehouse
     {
         public Coordinate Location { get; set; }
-        public List<Product> Products { get; } = new List<Product>();
+        public List<Product> Products { get; } = new List<Product>(); 
     }
 
     public class Product
