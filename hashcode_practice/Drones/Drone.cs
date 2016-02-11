@@ -43,5 +43,15 @@ namespace hashcode_practice
             Products.AddRange(order.Products);
             CurrentPayload += order.Weight;
         }
+
+        public void Deliver()
+        {
+            
+        }
+
+        public void Wait(int number)
+        {
+            
+        }
     }
 }
