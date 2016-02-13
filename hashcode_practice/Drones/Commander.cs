@@ -35,7 +35,8 @@ namespace Drones
                 {
                     foreach (var product in order.Products.Where(x => x.Quantity > 0))
                     {
-                        var warehouse = data.Warehouses.FirstOrDefault(w => w.Products.Any(p => p.ProductType == product.ProductType && p.Quantity > 0));
+                        var warehouse = data.Warehouses.Where(w => w.Products.Any(p => p.ProductType == product.ProductType && p.Quantity > 0))
+                                                       .OrderBy(w=> GetStepsToGo(w.Location, order.Location)).First();
 
                         var drone = GetBestDrone(warehouse, order);
 
@@ -79,7 +80,7 @@ namespace Drones
 
         private Drone GetBestDrone(Warehouse warehouse, Order order)
         {
-            return drones.Where( x=> x.WillBeFreeAtStep + GetStepsToDoneOrder(x, warehouse, order ) < data.MaxTurns )
+            return drones.Where( x=> x.WillBeFreeAtStep + GetStepsToDoneOrder(x, warehouse, order ) <= data.MaxTurns )
                          .OrderBy(x => GetStepsToGo(x.FreeLocation, warehouse.Location)).First();
         }
     }
