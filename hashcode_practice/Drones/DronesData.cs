@@ -67,8 +67,6 @@ namespace Drones
             order.Location = new Coordinate(a[0], a[1]);
             var numberOfItems = ReadLineAsArrayOfInts().First();
             LoadOrderProducts(order.Products);
-
-            Debug.Assert(numberOfItems == order.Products.Count);
         }
 
         private void LoadWareHouses()
@@ -89,10 +87,20 @@ namespace Drones
             LoadWarehouseProducts(warehouse.Products);
         }
 
-        void LoadOrderProducts( List<Product> list )
+        void LoadOrderProducts(List<Product> list)
         {
             var productsQuantity = ReadLineAsArrayOfInts();
-            list.AddRange(productsQuantity.Select((index) => new Product { ProductType = index, Quantity = 1 }));
+
+            var orders = from x in productsQuantity
+                         group x by x into g
+                         select new Product
+                         {
+                             ProductType = g.Key,
+                             Quantity = g.Count()
+                         };
+
+
+            list.AddRange(orders);
         }
 
         void LoadWarehouseProducts(List<Product> list)
