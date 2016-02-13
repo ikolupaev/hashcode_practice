@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Drones;
+using System.Diagnostics;
 
 namespace hashcode_practice
 {
@@ -23,9 +24,10 @@ namespace hashcode_practice
     {
         public int Index { get; set; }
         public Coordinate Location { get; set; }
-        public List<Product> Products { get; } = new List<Product>(); 
+        public List<Product> Products { get; } = new List<Product>();
     }
 
+    [DebuggerDisplay("{ProductType} - {Quantity} - {Weight}")]
     public class Product
     {
         public int ProductType { get; set; }

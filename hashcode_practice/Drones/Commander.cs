@@ -11,6 +11,8 @@ namespace Drones
         public List<Drone> drones;
 
         int currentDroneIndex = 0;
+        const int LoadTime = 1;
+        const int UnloadTime = LoadTime;
 
         public Commander(DronesData data)
         {
@@ -33,21 +35,71 @@ namespace Drones
 
                 foreach (var order in orders)
                 {
-                    foreach (var product in order.Products.Where(x => x.Quantity > 0))
+                    var matchedItems = data.Warehouses.Select(w => new { WarehouseIndex = w.Index, Items = GetMatchedItems(w, order) }).OrderByDescending(x => x.Items.Count());
+
+                    if (!matchedItems.Any()) continue;
+
+                    Drone orderDrone = null;
+
+                    foreach (var item in matchedItems)
                     {
-                        var warehouse = data.Warehouses.Where(w => w.Products.Any(p => p.ProductType == product.ProductType && p.Quantity > 0))
-                                                       .OrderBy(w=> GetStepsToGo(w.Location, order.Location)).First();
+                        foreach (var wi in item.Items)
+                        {
+                            var orderProduct = order.Products.SingleOrDefault(x => x.ProductType == wi.ProductType);
 
-                        var drone = GetBestDrone(warehouse, order);
+                            var warehouse = data.Warehouses[item.WarehouseIndex];
 
-                        var warehouseProduct = warehouse.Products[product.ProductType];
-                        var amount = Math.Min(product.Quantity, warehouseProduct.Quantity);
+                            if (orderDrone == null)
+                            {
+                                var availableDrones = from drone in drones
+                                                      where drone.WillBeFreeAtStep +
+                                                            + GetStepsToGo(drone.FreeLocation, warehouse.Location)
+                                                            + LoadTime
+                                                            + (drone.LoadedProducts.Count + 1) * UnloadTime
+                                                            < data.MaxTurns
+                                                      select drone;
 
-                        SendDrone(drone, warehouse, order, product, amount);
+                                if (!availableDrones.Any()) continue;
 
-                        warehouseProduct.Quantity -= amount;
-                        product.Quantity -= amount;
+                                orderDrone = availableDrones.OrderBy(x => x.WillBeFreeAtStep).First();
+                            }
+
+                            if ( orderDrone != null 
+                                 && orderProduct.Quantity > 0
+                                 && orderDrone.LoadedWeight + wi.Weight <= DronesData.MaxPayload )
+                            {
+                                LoadItem(orderDrone, warehouse, wi.ProductType, wi.Quantity);
+                                orderProduct.Quantity -= wi.Quantity;
+                            }
+                        }
                     }
+
+                    if (orderDrone != null)
+                    {
+                        foreach (var item in orderDrone.LoadedProducts)
+                        {
+                            UnoadItem(orderDrone, order, item.ProductType, item.Quantity);
+                        }
+                    }
+
+                    RemoveEmptyProducts(order.Products);
+                }
+            }
+        }
+
+        private IEnumerable<Product> GetMatchedItems(Warehouse warehouse, Order order)
+        {
+            foreach( var warehouseProduct in warehouse.Products.Where(x=> x.Quantity > 0 ) )
+            {
+                var p = order.Products.FirstOrDefault(x => x.ProductType == warehouseProduct.ProductType);
+
+                if( p != null )
+                {
+                    yield return new Product
+                    {
+                        ProductType = p.ProductType,
+                        Quantity = Math.Min(p.Quantity, warehouseProduct.Quantity)
+                    };
                 }
             }
         }
@@ -62,9 +114,37 @@ namespace Drones
             drone.FreeLocation = order.Location;
         }
 
-        int GetStepsToDoneOrder( Drone drone, Warehouse warehouse, Order order )
+        void LoadItem(Drone drone, Warehouse warehouse, int productType, int quantity)
         {
-            return GetStepsToGo(drone.FreeLocation, warehouse.Location) + 1 +
+            drone.Commands.Add(new LoadCommand(warehouse.Index, productType, quantity));
+            drone.WillBeFreeAtStep += GetStepsToGo(drone.FreeLocation, warehouse.Location) + 1;
+            drone.FreeLocation = warehouse.Location;
+            drone.LoadedProducts.Add(new Product { ProductType = productType, Quantity = quantity });
+            warehouse.Products[productType].Quantity -= quantity;
+        }
+
+        void UnoadItem(Drone drone, Order order, int productType, int quantity)
+        {
+            drone.Commands.Add(new DeliverCommand(order.Index, productType, quantity));
+            drone.WillBeFreeAtStep += GetStepsToGo(drone.FreeLocation, order.Location) + 1;
+            drone.FreeLocation = order.Location;
+
+            //items are removed before to dont overload the order
+            //order.Products.Single(x => x.ProductType == productType).Quantity -= quantity;
+            //RemoveEmptyProducts(drone.LoadedProducts);
+
+            drone.LoadedProducts.Single(x => x.ProductType == productType).Quantity -= quantity;
+            RemoveEmptyProducts(order.Products);
+        }
+
+        private void RemoveEmptyProducts(List<Product> products)
+        {
+            products.RemoveAll(x=> x.Quantity == 0);
+        }
+
+        int GetStepsToDoneOrder(Drone drone, Warehouse warehouse, Order order)
+        {
+            return GetStepsToGo(drone.FreeLocation, warehouse.Location) + drone.LoadedProducts.Count() + 1 +
                    GetStepsToGo(warehouse.Location, order.Location) + 1;
         }
 
@@ -78,10 +158,9 @@ namespace Drones
             return (int)Math.Sqrt(r * r + c * c) + 1;
         }
 
-        private Drone GetBestDrone(Warehouse warehouse, Order order)
+        private Drone GetBestDrone()
         {
-            return drones.Where( x=> x.WillBeFreeAtStep + GetStepsToDoneOrder(x, warehouse, order ) <= data.MaxTurns )
-                         .OrderBy(x => GetStepsToGo(x.FreeLocation, warehouse.Location)).First();
+            return drones.Where(x => x.WillBeFreeAtStep < data.MaxTurns).OrderBy(x => x.WillBeFreeAtStep).First();
         }
     }
 }

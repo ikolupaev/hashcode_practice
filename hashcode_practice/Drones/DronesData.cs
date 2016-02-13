@@ -18,7 +18,7 @@ namespace Drones
 
         public int NumberOfDrones { get; private set; }
 
-        public static int MaxPayLoad { get; private set; }
+        public static int MaxPayload { get; private set; }
         public int ProductTypes { get; private set; }
         public int MaxTurns { get; private set; }
 
@@ -54,9 +54,9 @@ namespace Drones
 
             this.Orders = new Order[this.NumberOfOrders];
 
-            for(int i = 0; i< NumberOfOrders; i++)
+            for (int i = 0; i < NumberOfOrders; i++)
             {
-                this.Orders[i] = new Order { Index = i};
+                this.Orders[i] = new Order { Index = i };
                 LoadOrder(this.Orders[i]);
             }
         }
@@ -74,9 +74,9 @@ namespace Drones
         private void LoadWareHouses()
         {
             this.Warehouses = new Warehouse[NumberOfWarehouse];
-            for( int i = 0; i < NumberOfWarehouse; i++ )
+            for (int i = 0; i < NumberOfWarehouse; i++)
             {
-                Warehouses[i] = new Warehouse {Index = i};
+                Warehouses[i] = new Warehouse { Index = i };
                 LoadWareHouse(Warehouses[i]);
             }
         }
@@ -89,7 +89,7 @@ namespace Drones
             LoadWarehouseProducts(warehouse.Products);
         }
 
-        void LoadOrderProducts( List<Product> list )
+        void LoadOrderProducts(List<Product> list)
         {
             var productsQuantity = ReadLineAsArrayOfInts();
             list.AddRange(productsQuantity.Select((index) => new Product { ProductType = index, Quantity = 1 }));
@@ -113,7 +113,7 @@ namespace Drones
             this.Columns = int.Parse(s[1]);
             this.NumberOfDrones = int.Parse(s[2]);
             this.MaxTurns = int.Parse(s[3]);
-            MaxPayLoad = int.Parse(s[4]);
+            MaxPayload = int.Parse(s[4]);
         }
     }
 }

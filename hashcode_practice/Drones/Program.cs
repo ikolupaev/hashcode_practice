@@ -26,6 +26,8 @@ namespace Drones
             var data = new DronesData();
             data.Load(inFile);
 
+            Console.WriteLine($"Planing {inFile}...");
+
             var commander = new Commander(data);
             commander.PlanWork();
 
@@ -48,6 +50,8 @@ namespace Drones
                     i++;
                 }
             }
+
+            Console.WriteLine($"{fileName} is saved");
         }
     }
 }

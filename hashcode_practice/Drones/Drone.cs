@@ -14,5 +14,9 @@ namespace hashcode_practice
         public int WillBeFreeAtStep { get; set; }
 
         public Coordinate FreeLocation { get; set; }
+
+        public int LoadedWeight => LoadedProducts.Sum(x => x.Weight);
+
+        public List<Product> LoadedProducts { get; } = new List<Product>();
     }
 }
