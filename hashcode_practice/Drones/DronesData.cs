@@ -18,7 +18,7 @@ namespace Drones
 
         public int NumberOfDrones { get; private set; }
 
-        public static int MaxPayload { get; private set; }
+        public static int MaxPayload { get; set; }
         public int ProductTypes { get; private set; }
         public int MaxTurns { get; private set; }
 

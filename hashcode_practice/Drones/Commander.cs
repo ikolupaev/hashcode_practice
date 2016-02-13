@@ -21,7 +21,12 @@ namespace Drones
 
             for (int i = 0; i < data.NumberOfDrones; i++)
             {
-                drones.Add(new Drone { FreeLocation = data.Warehouses[0].Location, WillBeFreeAtStep = 0 });
+                drones.Add( new Drone
+                {
+                    Index = i,
+                    FreeLocation = data.Warehouses[0].Location,
+                    WillBeFreeAtStep = 0
+                });
             }
         }
 
@@ -66,10 +71,16 @@ namespace Drones
 
                             if ( orderDrone != null 
                                  && orderProduct.Quantity > 0
-                                 && orderDrone.LoadedWeight + wi.Weight <= DronesData.MaxPayload )
+                                 && orderDrone.LoadedWeight + wi.Weight < DronesData.MaxPayload )
                             {
-                                LoadItem(orderDrone, warehouse, wi.ProductType, wi.Quantity);
-                                orderProduct.Quantity -= wi.Quantity;
+                                var q = wi.Quantity;
+
+                                while (q > 0 && orderDrone.LoadedWeight + wi.Weight * q > DronesData.MaxPayload)
+                                    q--;
+
+                                LoadItem(orderDrone, warehouse, wi.ProductType, q);
+                                orderProduct.Quantity -= q;
+                                wi.Quantity -= q;
                             }
                         }
                     }
@@ -80,6 +91,7 @@ namespace Drones
                         {
                             UnoadItem(orderDrone, order, item.ProductType, item.Quantity);
                         }
+                        orderDrone.LoadedProducts.Clear();
                     }
 
                     RemoveEmptyProducts(order.Products);
@@ -128,13 +140,6 @@ namespace Drones
             drone.Commands.Add(new DeliverCommand(order.Index, productType, quantity));
             drone.WillBeFreeAtStep += GetStepsToGo(drone.FreeLocation, order.Location) + 1;
             drone.FreeLocation = order.Location;
-
-            //items are removed before to dont overload the order
-            //order.Products.Single(x => x.ProductType == productType).Quantity -= quantity;
-            //RemoveEmptyProducts(drone.LoadedProducts);
-
-            drone.LoadedProducts.Single(x => x.ProductType == productType).Quantity -= quantity;
-            RemoveEmptyProducts(order.Products);
         }
 
         private void RemoveEmptyProducts(List<Product> products)
