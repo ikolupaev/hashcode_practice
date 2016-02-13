@@ -29,7 +29,7 @@ namespace hashcode_practice
     public class Product
     {
         public int ProductType { get; set; }
-        public int Amount { get; set; }
+        public int Quantity { get; set; }
         public int Weight => DronesData.ProductWeights[ProductType];
     }
 
@@ -40,7 +40,8 @@ namespace hashcode_practice
 
         public List<Product> Products { get; } = new List<Product>();
 
-        //total order weight
-        public int Weight => Products.Sum(product => product.Weight);
+        public int TotalWeight => Products.Sum(product => product.Weight);
+
+        public int TotalQuantity => Products.Sum(product => product.Quantity);
     }
 }
