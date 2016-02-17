@@ -10,7 +10,7 @@ namespace hashcode_practice
     public class Drone
     {
         public int Index { get; set; }
-        public List<Command> Commands { get; } = new List<Command>();
+        public List<ICommand> Commands { get; } = new List<ICommand>();
 
         public int WillBeFreeAtStep { get; set; }
 
@@ -19,5 +19,14 @@ namespace hashcode_practice
         public int LoadedWeight => LoadedProducts.Sum(x => x.Weight * x.Quantity);
 
         public List<Product> LoadedProducts { get; } = new List<Product>();
+
+        public int GetProductQuantity( int productType )
+        {
+            var p = LoadedProducts.FirstOrDefault(x => x.ProductType == productType);
+
+            if (p == null) return 0;
+
+            return p.Quantity;
+        }
     }
 }

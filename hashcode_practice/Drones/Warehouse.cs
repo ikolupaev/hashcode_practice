@@ -20,30 +20,43 @@ namespace hashcode_practice
         }
     }
 
-    public class Warehouse
+    public class Warehouse : ILocated
     {
         public int Index { get; set; }
         public Coordinate Location { get; set; }
         public List<Product> Products { get; } = new List<Product>();
     }
 
-    [DebuggerDisplay("{ProductType} - {Quantity} - {Weight}")]
+    [DebuggerDisplay("type: {ProductType} - qty: {Quantity} - w: {Weight}")]
     public class Product
     {
+        public Product()
+        {
+        }
+
+        public Product(Product p)
+        {
+            this.ProductType = p.ProductType;
+            this.Quantity = p.Quantity;
+        }
+
         public int ProductType { get; set; }
         public int Quantity { get; set; }
         public int Weight => DronesData.ProductWeights[ProductType];
     }
 
-    public class Order
+    public class Order: ILocated
     {
         public int Index { get; set; }
         public Coordinate Location { get; set; }
-
         public List<Product> Products { get; } = new List<Product>();
+        public int GetProductQuantity(int productType)
+        {
+            var p = Products.FirstOrDefault(x => x.ProductType == productType);
 
-        public int TotalWeight => Products.Sum(product => product.Weight);
+            if (p == null) return 0;
 
-        public int TotalQuantity => Products.Sum(product => product.Quantity);
+            return p.Quantity;
+        }
     }
 }

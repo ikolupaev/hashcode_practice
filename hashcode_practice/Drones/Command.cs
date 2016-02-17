@@ -8,13 +8,18 @@ using hashcode_practice;
 
 namespace Drones
 {
-    public abstract class Command { }
+    public interface ICommand { }
 
-    public class LoadCommand : Command
+    public class LoadCommand : ICommand
     {
         private int amount;
         private int productType;
         private int warehouseIndex;
+
+        protected virtual string GetCommandLetter()
+        {
+            return "L";
+        }
 
         public LoadCommand(int warehouseIndex, int productType, int amount)
         {
@@ -25,11 +30,21 @@ namespace Drones
 
         public override string ToString()
         {
-            return $"L {this.warehouseIndex} {this.productType} {this.amount}";
+            return $"{GetCommandLetter()} {this.warehouseIndex} {this.productType} {this.amount}";
         }
     }
 
-    public class DeliverCommand : Command
+    public class UnloadCommand: LoadCommand
+    {
+        public UnloadCommand(int warehouseIndex, int productType, int amount) : base(warehouseIndex, productType, amount) { }
+
+        protected override string GetCommandLetter()
+        {
+            return "U";
+        }
+    }
+
+    public class DeliverCommand : ICommand
     {
         private int amount;
         private int orderIndex;
@@ -48,5 +63,5 @@ namespace Drones
         }
     }
 
-    public class WaitCommand : Command { }
+    public class WaitCommand : ICommand { }
 }
