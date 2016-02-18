@@ -19,5 +19,8 @@ namespace hashcode_practice
         public int LoadedWeight => LoadedProducts.Sum(x => x.Weight * x.Quantity);
 
         public List<Product> LoadedProducts { get; } = new List<Product>();
+
+        public Warehouse FreeAtWarehouse;
+        public Order FreeAtOrder;
     }
 }
