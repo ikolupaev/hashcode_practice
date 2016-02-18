@@ -9,9 +9,9 @@ namespace Drones
     {
         public static bool ContainsAllOf(this List<Product> allProducts, List<Product> subset)
         {
-            foreach( var sp in subset )
+            foreach (var sp in subset)
             {
-                if( !allProducts.Any(x=> x.ProductType==sp.ProductType && x.Quantity>= sp.Quantity) )
+                if (!allProducts.Any(x => x.ProductType == sp.ProductType && x.Quantity >= sp.Quantity))
                 {
                     return false;
                 }
@@ -67,7 +67,7 @@ namespace Drones
                 }
 
                 var warehouse = GetNearestWarehouse(drone);
-                var order = FindNearestOrderWithAllItems( warehouse.Location, warehouse.Products);
+                var order = FindNearestOrderWithAllItems(warehouse.Location, warehouse.Products);
                 if (order != null)
                 {
                     DeliverOrderFromOneWarehouse(drone, order);
@@ -83,7 +83,7 @@ namespace Drones
 
         private Order FindNearestOrderWithAllItems(Coordinate location, List<Product> products)
         {
-            return data.Orders.Where(o => o.TotalQuantity > 0 && products.ContainsAllOf(o.Products)).OrderBy(o => GetStepsToGo(location, o.Location)).First();
+            return data.Orders.Where(o => o.TotalQuantity > 0 && products.ContainsAllOf(o.Products)).OrderBy(o => GetStepsToGo(location, o.Location)).FirstOrDefault();
         }
 
         private Warehouse GetNearestWarehouse(Drone drone)
@@ -101,7 +101,7 @@ namespace Drones
         private void DeliverOrderFromOneWarehouse(Drone drone, Order order)
         {
             var warehouse = drone.FreeAtWarehouse;
-            var products = new List<Product>(order.Products.Select( x=> new Product { ProductType = x.ProductType, Quantity = x.Quantity } ));
+            var products = new List<Product>(order.Products.Select(x => new Product { ProductType = x.ProductType, Quantity = x.Quantity }));
 
             while (products.Count > 0 && drone != null)
             {
@@ -145,25 +145,14 @@ namespace Drones
 
         private void LoadDrone(Drone drone, Warehouse warehouse, List<Product> products)
         {
-            var atLeastOneLoaded = true;
-            while (atLeastOneLoaded)
+            var productsPack = Packer.PackProducts(products, DronesData.MaxPayload - drone.LoadedWeight).ToArray();
+            foreach (var p in productsPack)
             {
-                atLeastOneLoaded = false;
-                foreach (var p in products)
-                {
-                    var maxQuantity = (DronesData.MaxPayload - drone.LoadedWeight) / p.Weight;
-
-                    if (p.Quantity > 0 && maxQuantity > 0)
-                    {
-                        var q = Math.Min(p.Quantity, maxQuantity);
-                        LoadProduct(drone, warehouse, p.ProductType, q);
-                        p.Quantity -= q;
-                        atLeastOneLoaded = true;
-                    }
-                }
-
-                RemoveEmptyProducts(products);
+                LoadProduct(drone, warehouse, p.ProductType, p.Quantity);
+                products.Find(x => x.ProductType == p.ProductType).Quantity -= p.Quantity;
             }
+
+            RemoveEmptyProducts(products);
         }
 
         private IEnumerable<Product> GetMatchedItems(Warehouse warehouse, Order order)

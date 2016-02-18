@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Drones
 {
-    internal class DronesData
+    public class DronesData
     {
         public DronesData()
         {
@@ -22,7 +22,7 @@ namespace Drones
         public int ProductTypes { get; private set; }
         public int MaxTurns { get; private set; }
 
-        public static int[] ProductWeights { get; private set; }
+        public static int[] ProductWeights { get; set; }
 
         public int NumberOfWarehouse { get; private set; }
         public Warehouse[] Warehouses { get; private set; }

@@ -30,6 +30,15 @@ namespace hashcode_practice
     [DebuggerDisplay("{ProductType} - {Quantity} - {Weight}")]
     public class Product
     {
+        public Product()
+        {
+        }
+        public Product( int productType, int quantity )
+        {
+            this.ProductType = productType;
+            this.Quantity = quantity;
+        }
+
         public int ProductType { get; set; }
         public int Quantity { get; set; }
         public int Weight => DronesData.ProductWeights[ProductType];
