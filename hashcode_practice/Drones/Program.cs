@@ -13,7 +13,7 @@ namespace Drones
 
         static void Main(string[] args)
         {
-            var files = Directory.GetFiles(@"../../data/", "mother_of_all_warehouses.in");
+            var files = Directory.GetFiles(@"../../data/", "*.in");
 
             foreach (var f in files)
             {

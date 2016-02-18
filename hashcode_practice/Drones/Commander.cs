@@ -74,11 +74,65 @@ namespace Drones
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    DeliverNearestOrder(drone);
                 }
             }
 
             Console.WriteLine();
+        }
+
+        private void DeliverNearestOrder(Drone drone)
+        {
+            var order = data.Orders.Where(o => o.TotalQuantity > 0).OrderBy(o => GetStepsToGo(drone.FreeLocation, o.Location)).First();
+            while (order.TotalQuantity > 0 && drone != null)
+            {
+                var productsToDeliver = GetProductTypes(order.Products);
+                var warehouses = from w in data.Warehouses
+                                 select new
+                                 {
+                                     Warehouse = w,
+                                     Products = GetProductTypes(w.Products).Intersect(productsToDeliver)
+                                 }
+                                 into ww
+                                 orderby ww.Products.Count() descending
+                                 select ww;
+
+                var best = warehouses.First();
+
+                var products = (from x in best.Products
+                                select new Product
+                                {
+                                    ProductType = x,
+                                    Quantity = order.Products.Find(p => p.ProductType == x).Quantity
+                                }).ToArray();
+
+                foreach (var p in products)
+                {
+                    var wq = best.Warehouse.Products.Find(x => x.ProductType == p.ProductType).Quantity;
+                    if (p.Quantity > wq)
+                    {
+                        p.Quantity = wq;
+                    }
+                }
+
+                LoadDrone(drone, best.Warehouse, products.ToList());
+                UnloadDrone(drone, order, drone.LoadedProducts);
+
+                if (order.Products.Count > 0)
+                {
+                    drone = FindNearestDrone(best.Warehouse);
+                }
+            }
+
+            if (drone == null)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        int[] GetProductTypes(IEnumerable<Product> products)
+        {
+            return products.Where(x => x.Quantity > 0).Select(x => x.ProductType).Distinct().ToArray();
         }
 
         private Order FindNearestOrderWithAllItems(Coordinate location, List<Product> products)
@@ -126,7 +180,7 @@ namespace Drones
 
             if (drone == null)
             {
-                drone = drones.Where(x => x.FreeAtWarehouse == warehouse).OrderBy(x => GetStepsToGo(warehouse.Location, x.FreeLocation)).First();
+                drone = drones.OrderBy(x => GetStepsToGo(warehouse.Location, x.FreeLocation)).First();
             }
 
             return drone;

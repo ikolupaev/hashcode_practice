@@ -83,5 +83,14 @@ namespace Drones.Tests
 
             Assert.IsTrue(next);
         }
+
+        [TestMethod]
+        public void IntersectTest()
+        {
+            var a = new[] { 1, 2, 3, 4, 5 };
+            var b = new[] { 2, 3, 8 };
+
+            Assert.AreEqual(2, a.Intersect(b).Count());
+        }
     }
 }
