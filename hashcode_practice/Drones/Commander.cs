@@ -10,7 +10,6 @@ namespace Drones
         private DronesData data;
         public List<Drone> drones;
 
-        int currentDroneIndex = 0;
         const int LoadTime = 1;
         const int UnloadTime = LoadTime;
 
@@ -32,11 +31,14 @@ namespace Drones
 
         internal void PlanWork()
         {
-            while (drones.Any(x => x.WillBeFreeAtStep < data.MaxTurns))
+            while (true)
             {
                 var orders = data.Orders.Where(x => x.TotalQuantity > 0);
+                var dronesCount = drones.Count(x => x.WillBeFreeAtStep < data.MaxTurns);
 
-                if (!orders.Any()) return;
+                Console.Write($"orders left: {orders.Count()} drones left: {dronesCount} {new string(' ', 10)}\r");
+
+                if (!orders.Any() || dronesCount == 0 ) break;
 
                 foreach (var order in orders)
                 {
@@ -97,6 +99,8 @@ namespace Drones
                     RemoveEmptyProducts(order.Products);
                 }
             }
+
+            Console.WriteLine();
         }
 
         private IEnumerable<Product> GetMatchedItems(Warehouse warehouse, Order order)
